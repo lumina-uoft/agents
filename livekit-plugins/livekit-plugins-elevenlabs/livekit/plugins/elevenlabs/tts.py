@@ -78,6 +78,15 @@ DEFAULT_VOICE = Voice(
     ),
 )
 
+SPONGE_VOICE = Voice(
+    id="t7LVtbmjN4wDrstocBdN",
+    name="Sponge",
+    category="cloned",
+    settings=VoiceSettings(
+        stability=0.91, similarity_boost=0.5, style=0.0, use_speaker_boost=True
+    ),
+)
+
 API_BASE_URL_V1 = "https://api.elevenlabs.io/v1"
 AUTHORIZATION_HEADER = "xi-api-key"
 
