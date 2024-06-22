@@ -30,7 +30,7 @@ setuptools.setup(
     description="Agent Framework plugin for services from OpenAI",
     long_description=(here / "README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
-    url="https://github.com/livekit/agents",
+    url="",
     cmdclass={},
     classifiers=[
         "Intended Audience :: Developers",
@@ -55,8 +55,8 @@ setuptools.setup(
         "livekit.plugins.openai": ["py.typed"],
     },
     project_urls={
-        "Documentation": "https://docs.livekit.io",
-        "Website": "https://livekit.io/",
-        "Source": "https://github.com/livekit/agents",
+        "Documentation": "",
+        "Website": "",
+        "Source": "",
     },
 )
