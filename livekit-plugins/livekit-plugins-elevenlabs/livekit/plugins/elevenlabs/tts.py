@@ -70,7 +70,7 @@ class Voice:
 
 
 DEFAULT_VOICE = Voice(
-    id="EXAVITQu4vr4xnSDxMaL",
+    id="EXAVITQu4vr4xnSDxMaL", 
     name="Bella",
     category="premade",
     settings=VoiceSettings(
@@ -78,6 +78,7 @@ DEFAULT_VOICE = Voice(
     ),
 )
 
+# Sponge voice is not stable
 SPONGE_VOICE = Voice(
     id="t7LVtbmjN4wDrstocBdN",
     name="Sponge",
@@ -86,6 +87,39 @@ SPONGE_VOICE = Voice(
         stability=0.91, similarity_boost=0.5, style=0.0, use_speaker_boost=True
     ),
 )
+
+# Middle-aged Male with American accent - relatively slow paced
+MATHEW_VOICE = Voice(
+    id="x3keOIw4qFkhll7y5K0m",
+    name="Mathew",
+    category="cloned",
+    settings=VoiceSettings(
+        stability=0.81, similarity_boost=0.5, style=0.0, use_speaker_boost=True
+    ),
+)
+
+
+SANTA_VOICE = Voice(
+    id="knrPHWnBmmDHMoiMeP3l",
+    name="Santa",
+    category="premade",
+    settings=VoiceSettings(
+        stability=0.71, similarity_boost=0.5, style=0.0, use_speaker_boost=True
+    ),
+)
+
+#Random american boy
+BOY_VOICE = Voice(
+    id="Hx2iKdrzGw1h112HOIfy",
+    name="Boy",
+    category="cloned",
+    settings=VoiceSettings(
+        stability=0.91, similarity_boost=0.5, style=0.0, use_speaker_boost=True
+    ),
+)
+
+
+ALL_VOICES = [DEFAULT_VOICE, SPONGE_VOICE]  # I tried to import this instead of each voice in __init__.py but it didn't work
 
 API_BASE_URL_V1 = "https://api.elevenlabs.io/v1"
 AUTHORIZATION_HEADER = "xi-api-key"

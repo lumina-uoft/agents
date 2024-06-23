@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from .models import TTSEncoding, TTSModels
-from .tts import DEFAULT_VOICE, TTS, Voice, VoiceSettings
+from .tts import DEFAULT_VOICE, SPONGE_VOICE, MATHEW_VOICE, SANTA_VOICE, TTS, Voice, VoiceSettings
 from .version import __version__
 
 __all__ = [
@@ -23,6 +23,9 @@ __all__ = [
     "TTSEncoding",
     "TTSModels",
     "DEFAULT_VOICE",
+    "SPONGE_VOICE",
+    "MATHEW_VOICE",
+    "SANTA_VOICE",
     "__version__",
 ]
 
