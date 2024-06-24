@@ -29,7 +29,7 @@ __all__ = [
     "__version__",
 ]
 
-from livekit.agents import Plugin
+from livekit.agents import Plugin # type: ignore
 
 
 class ElevenLabsPlugin(Plugin):

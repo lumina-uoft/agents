@@ -25,7 +25,7 @@ from typing import List, Literal, Optional
 
 import aiohttp
 from livekit import rtc
-from livekit.agents import aio, tokenize, tts, utils
+from livekit.agents import aio, tokenize, tts, utils # type: ignore
 
 from .log import logger
 from .models import (
