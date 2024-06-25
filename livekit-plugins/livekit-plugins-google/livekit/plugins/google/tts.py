@@ -47,12 +47,12 @@ class TTS(tts.TTS):
     def __init__(
         self,
         *,
-        language: LgType = "en-US",
-        gender: GenderType = "neutral",
-        voice_name: str = "",  # Not required
+        language: LgType = "en-US", #en-US, en-GB
+        gender: GenderType = "male", #neutral
+        voice_name: str = "en-US-Journey-D",  # Not required en-GB-Studio-B, en-GB-News-K
         encoding: AudioEncodingType = "linear16",
         sample_rate: int = 24000,
-        speaking_rate: float = 1.0,
+        speaking_rate: float = 0.7, # 1.0 is normal speed, 0.5 is a bit too slow, 0.7 is quite good.
         credentials_info: dict | None = None,
         credentials_file: str | None = None,
     ) -> None:
