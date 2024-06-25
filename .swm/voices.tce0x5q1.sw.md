@@ -73,12 +73,11 @@ en-GB-News-K: very machine like
 &nbsp;
 
 ```python
-        language: LgType = "en-US",
-        gender: GenderType = "neutral",
-        voice_name: str = "",  # Not required
+        language: LgType = "en-US", #en-US, en-GB
+        gender: GenderType = "male", #neutral
+        voice_name: str = "en-US-Journey-D",  # Not required en-GB-Studio-B, en-GB-News-K
         encoding: AudioEncodingType = "linear16",
         sample_rate: int = 24000,
-        speaking_rate: float = 1.0,
 ```
 
 ---
