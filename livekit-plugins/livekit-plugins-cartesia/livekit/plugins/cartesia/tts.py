@@ -25,7 +25,7 @@ from livekit import rtc
 from livekit.agents import tts, utils
 
 from .log import logger
-from .models import TTSDefaultVoiceEmbedding, TTSEncoding, TTSModels
+from .models import TTSDefaultVoiceEmbedding, TTSEncoding, TTSModels, ReadingMan, SpongeVoice, TedVoice, ChildVoice # add ReadingMan & SpongeVoice & TedVoice
 
 API_AUTH_HEADER = "X-API-Key"
 API_VERSION_HEADER = "Cartesia-Version"
@@ -47,7 +47,8 @@ class TTS(tts.TTS):
         *,
         model: TTSModels = "upbeat-moon",
         encoding: TTSEncoding = "pcm_s16le",
-        voice: str | list[float] = TTSDefaultVoiceEmbedding,
+        #voice: str | list[float] = TTSDefaultVoiceEmbedding,
+        voice: str | list[float] = ChildVoice, # change to ReadingMan
         sample_rate: int = 24000,
         api_key: str | None = None,
         http_session: aiohttp.ClientSession | None = None,
