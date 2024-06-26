@@ -84,6 +84,22 @@ en-GB-News-K: very machine like
 
 </SwmSnippet>
 
-&nbsp;
+## Azure TTS voices
+
+Not very stable and quite machine-like. Potential in modify speed, style, and even role-play, but use another SSML language - it takes effort to modify the codes.
+
+<SwmSnippet path="/science-time.py" line="60" repo-id="Z2l0aHViJTNBJTNBbWFpbiUzQSUzQWx1bWluYS11b2Z0">
+
+---
+
+Davis: old man, a bit machine-like
+
+```python
+        tts=azure.TTS(voice = "en-US-DavisNeural"), # Azure TTS is not that stable and quite machine-like, but has potential in speed & style control, role-playing and voice cloning.
+```
+
+---
+
+</SwmSnippet>
 
 <SwmMeta version="3.0.0" repo-id="Z2l0aHViJTNBJTNBYWdlbnRzJTNBJTNBbHVtaW5hLXVvZnQ=" repo-name="agents"><sup>Powered by [Swimm](https://app.swimm.io/)</sup></SwmMeta>
