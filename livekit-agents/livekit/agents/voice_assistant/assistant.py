@@ -5,6 +5,7 @@ import contextlib
 import contextvars
 import logging
 import time
+import datetime
 from dataclasses import dataclass
 from typing import Any, AsyncIterable, Callable, Literal
 
@@ -19,6 +20,12 @@ from . import plotter
 
 logger = logging.getLogger("livekit.agents.voice_assistant")
 
+# Yi: Save message
+def save_message(role, text):
+    file_path = 'chat_history.txt'
+    timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    with open(file_path, 'a') as f:
+        f.write(f"{timestamp} - {role}: {text}\n")
 
 @dataclass
 class _SpeechData:
@@ -230,6 +237,17 @@ class VoiceAssistant(utils.EventEmitter[EventTypes]):
             add_to_chat_context: whether to add the speech to the chat context
         """
         await self._wait_ready()
+
+        # Yi: Save message
+        if isinstance(source, str):
+            text = source
+            save_message('assistant', text)
+
+
+            async def _gen():
+                yield text
+
+            source = _gen()
 
         data = _SpeechData(
             source=source,
@@ -518,6 +536,7 @@ class VoiceAssistant(utils.EventEmitter[EventTypes]):
 
     def _on_final_transcript(self, text: str) -> None:
         self._transcribed_text += text
+        save_message('user', text)  # Yi: Save message
         self._log_debug(f"received final transcript: {self._transcribed_text}")
 
         # to create an llm stream we need an async context
@@ -684,6 +703,7 @@ class VoiceAssistant(utils.EventEmitter[EventTypes]):
                     self.emit("agent_speech_interrupted", self._chat_ctx, msg)
                 else:
                     self.emit("agent_speech_committed", self._chat_ctx, msg)
+            save_message('assistant', data.collected_text) # Yi: Save message
 
             self._log_debug("playout finished", extra={"interrupted": data.interrupted})
         finally:

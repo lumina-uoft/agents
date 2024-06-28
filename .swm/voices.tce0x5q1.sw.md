@@ -58,7 +58,7 @@ TTSDefaultVoiceEmbedding: list[float] = [
 
 ## Google TTS voices
 
-### Can control speed , but there's strange noice at the beginning of each sentences. Some voices machine-like
+### Not stable for production. Can control speed , but there's strange noise at the beginning of each sentences. Some voices machine-like
 
 <SwmSnippet path="/livekit-plugins/livekit-plugins-google/livekit/plugins/google/tts.py" line="50">
 
