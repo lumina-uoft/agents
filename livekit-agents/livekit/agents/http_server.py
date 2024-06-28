@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Any
 
 from aiohttp import web
 
 
-async def health_check(_: Any):
+async def health_check(_):
     return web.Response(text="OK")
 
 
@@ -19,7 +18,7 @@ class HttpServer:
         self._port = port
         self._app = web.Application(loop=self._loop)
         self._app.add_routes([web.get("/", health_check)])
-        self._close_future = asyncio.Future[None](loop=self._loop)
+        self._close_future = asyncio.Future(loop=self._loop)
 
     async def run(self) -> None:
         self._runner = web.AppRunner(self._app)

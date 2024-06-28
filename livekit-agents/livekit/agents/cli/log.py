@@ -38,7 +38,10 @@ _RESERVED_ATTRS: Tuple[str, ...] = (
 )
 
 
-def _merge_record_extra(record: logging.LogRecord, target: Dict[Any, Any]):
+def _merge_record_extra(
+    record: logging.LogRecord,
+    target: Dict,
+):
     for key, value in record.__dict__.items():
         if key not in _RESERVED_ATTRS and not (
             hasattr(key, "startswith") and key.startswith("_")
@@ -65,7 +68,7 @@ def _parse_style(formatter: logging.Formatter) -> list[str]:
 
 class JsonFormatter(logging.Formatter):
     class JsonEncoder(json.JSONEncoder):
-        def default(self, o: Any):
+        def default(self, o):
             if isinstance(o, (date, datetime, time)):
                 return o.isoformat()
             elif istraceback(o):
@@ -160,7 +163,7 @@ class ColoredFormatter(logging.Formatter):
     def formatMessage(self, record: logging.LogRecord) -> str:
         """Formats a log record with colors"""
 
-        extra: Dict[Any, Any] = {}
+        extra = {}
         _merge_record_extra(record, extra)
 
         args = {}
@@ -189,14 +192,14 @@ def setup_logging(log_level: str, production: bool = True) -> None:
 
     if not production:
         # colorful logs for dev (improves readability)
-        colored_formatter = ColoredFormatter(
+        formatter = ColoredFormatter(
             "%(asctime)s - %(esc_levelcolor)s%(levelname)-4s%(esc_reset)s %(name)s - %(message)s %(extra)s",
         )
-        handler.setFormatter(colored_formatter)
+        handler.setFormatter(formatter)
     else:
         # production logs (serialized of json)
-        json_formatter = JsonFormatter()
-        handler.setFormatter(json_formatter)
+        formatter = JsonFormatter()
+        handler.setFormatter(formatter)
 
     root = logging.getLogger()
     root.addHandler(handler)

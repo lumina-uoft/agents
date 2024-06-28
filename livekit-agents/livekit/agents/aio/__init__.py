@@ -1,5 +1,5 @@
 from . import debug
-from .channel import Chan, ChanClosed, ChanReceiver, ChanSender
+from .channel import Chan, ChanClosed, ChanReceiver, ChanSender, channel
 from .interval import Interval, interval
 from .select import SelectLoop, select
 from .sleep import Sleep, SleepFinished, sleep

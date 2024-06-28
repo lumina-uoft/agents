@@ -1,17 +1,17 @@
 import asyncio
 import functools
 import logging
-from typing import Any, Callable
+from typing import Callable
 
 
 def log_exceptions(
     msg: str = "", logger: logging.Logger = logging.getLogger()
-) -> Callable[[Any], Any]:
-    def deco(fn: Callable[[Any], Any]):
+) -> Callable:
+    def deco(fn: Callable) -> Callable:
         if asyncio.iscoroutinefunction(fn):
 
             @functools.wraps(fn)
-            async def async_fn_logs(*args: Any, **kwargs: Any):
+            async def async_fn_logs(*args, **kwargs):
                 try:
                     return await fn(*args, **kwargs)
                 except Exception:
@@ -25,7 +25,7 @@ def log_exceptions(
         else:
 
             @functools.wraps(fn)
-            def fn_logs(*args: Any, **kwargs: Any):
+            def fn_logs(*args, **kwargs):
                 try:
                     return fn(*args, **kwargs)
                 except Exception:

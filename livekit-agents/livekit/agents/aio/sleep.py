@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Any
 
 
-def _finish_fut(fut: asyncio.Future[Any]):
+def _finish_fut(fut: asyncio.Future):
     if fut.cancelled():
         return
     fut.set_result(None)
@@ -19,7 +18,7 @@ class Sleep:
 
     def __init__(self, delay: float) -> None:
         self._delay = delay
-        self._handler: asyncio.TimerHandle | None = None
+        self._handler = None
 
     def reset(self, new_delay: float | None = None) -> None:
         if new_delay is None:
@@ -46,7 +45,7 @@ class Sleep:
 
     async def _sleep(self) -> None:
         if self._delay <= 0:
-            self._fut = asyncio.Future[None]()
+            self._fut = asyncio.Future()
             self._fut.set_result(None)
             return
 

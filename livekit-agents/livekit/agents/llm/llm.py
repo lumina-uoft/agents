@@ -2,17 +2,16 @@ from __future__ import annotations
 
 import abc
 from dataclasses import dataclass, field
-from typing import AsyncIterator
+from typing import AsyncIterator, Callable
 
-from . import function_context
 from .chat_context import ChatContext, ChatRole
+from .function_context import FunctionContext
 
 
 @dataclass
 class ChoiceDelta:
     role: ChatRole
     content: str | None = None
-    tool_calls: list[function_context.CalledFunction] | None = None
 
 
 @dataclass
@@ -30,33 +29,35 @@ class LLM(abc.ABC):
     @abc.abstractmethod
     async def chat(
         self,
-        *,
-        chat_ctx: ChatContext,
-        fnc_ctx: function_context.FunctionContext | None = None,
+        history: ChatContext,
+        fnc_ctx: FunctionContext | None = None,
         temperature: float | None = None,
         n: int | None = None,
     ) -> "LLMStream": ...
 
 
+@dataclass
+class CalledFunction:
+    fnc_name: str
+    fnc: Callable
+    args: dict
+
+
 class LLMStream(abc.ABC):
     def __init__(self) -> None:
-        self._called_functions: list[function_context.CalledFunction] = []
+        # fnc_name, args..
+        self._called_functions: list[CalledFunction] = []
 
     @property
-    def called_functions(self) -> list[function_context.CalledFunction]:
+    def called_functions(self) -> list[CalledFunction]:
         """List of called functions from this stream."""
         return self._called_functions
 
     @abc.abstractmethod
-    async def gather_function_results(
-        self,
-    ) -> list[function_context.CalledFunction]: ...
-
-    def __aiter__(self) -> AsyncIterator[ChatChunk]:
-        return self
+    def __aiter__(self) -> AsyncIterator[ChatChunk]: ...
 
     @abc.abstractmethod
     async def __anext__(self) -> ChatChunk: ...
 
     @abc.abstractmethod
-    async def aclose(self) -> None: ...
+    async def aclose(self, wait: bool = True) -> None: ...

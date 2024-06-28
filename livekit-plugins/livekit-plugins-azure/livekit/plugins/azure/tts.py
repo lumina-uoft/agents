@@ -21,7 +21,7 @@ from typing import Optional
 from livekit import rtc
 from livekit.agents import tts
 
-import azure.cognitiveservices.speech as speechsdk  # type: ignore
+import azure.cognitiveservices.speech as speechsdk
 
 from .log import logger
 

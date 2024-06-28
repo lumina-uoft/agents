@@ -59,8 +59,8 @@ PLT_MESSAGES: dict = {
 
 def _draw_plot(reader: ipc_enc.ProcessPipeReader):
     try:
-        import matplotlib as mpl  # type: ignore
-        import matplotlib.pyplot as plt  # type: ignore
+        import matplotlib as mpl
+        import matplotlib.pyplot as plt
     except ImportError:
         raise ImportError(
             "matplotlib is required to run use the VoiceAssistant plotter"

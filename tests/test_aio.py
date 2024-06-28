@@ -4,7 +4,7 @@ from livekit.agents import aio
 
 
 async def test_channel():
-    tx = rx = aio.Chan[int]()
+    tx, rx = aio.channel()
     sum = 0
 
     async def test_task():

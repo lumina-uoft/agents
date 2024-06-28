@@ -77,7 +77,7 @@ class StreamAdapterWrapper(SynthesizeStream):
         ]()
         self._bg_task = asyncio.create_task(self._run())
 
-        self._synth_tasks: set[asyncio.Task[None]] = set()
+        self._synth_tasks: set[asyncio.Task] = set()
         self._sem = asyncio.Semaphore(max_concurrent_requests)
 
     def push_text(self, token: str | None) -> None:
@@ -91,7 +91,7 @@ class StreamAdapterWrapper(SynthesizeStream):
         if not wait:
             self._bg_task.cancel()
 
-        await self._sent_stream.aclose()
+        await self._sent_stream.aclose(wait=wait)
         with contextlib.suppress(asyncio.CancelledError):
             await self._bg_task
 
@@ -111,7 +111,7 @@ class StreamAdapterWrapper(SynthesizeStream):
                     self._event_q.put_nowait(
                         SynthesisEvent(type=SynthesisEventType.AUDIO, audio=audio)
                     )
-            elif isinstance(token, _SegmentEnd):  # type: ignore
+            elif isinstance(token, _SegmentEnd):
                 self._event_q.put_nowait(
                     SynthesisEvent(type=SynthesisEventType.FINISHED)
                 )
@@ -135,7 +135,7 @@ class StreamAdapterWrapper(SynthesizeStream):
                 self._sync_q.put_nowait(_SegmentStart())
 
             elif ev.type == tokenize.TokenEventType.TOKEN:
-                audio_rx = audio_tx = aio.Chan[SynthesizedAudio]()
+                audio_tx, audio_rx = aio.channel()
                 task = asyncio.create_task(self._synthesize(ev.token, audio_tx))
                 self._synth_tasks.add(task)
                 task.add_done_callback(self._synth_tasks.discard)

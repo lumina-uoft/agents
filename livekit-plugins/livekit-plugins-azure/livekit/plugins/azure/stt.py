@@ -21,7 +21,7 @@ from livekit import rtc
 from livekit.agents import stt
 from livekit.agents.utils import AudioBuffer
 
-import azure.cognitiveservices.speech as speechsdk  # type: ignore
+import azure.cognitiveservices.speech as speechsdk
 
 from .log import logger
 
