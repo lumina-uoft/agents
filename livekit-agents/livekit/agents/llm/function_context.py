@@ -141,6 +141,13 @@ def is_type_supported(t: type) -> bool:
         return True
 
     if issubclass(t, enum.Enum):
-        return all(isinstance(e.value, str) for e in t)
+        initial_type = None
+        for e in t:
+            if initial_type is None:
+                initial_type = type(e.value)
+            if type(e.value) is not initial_type:
+                return False
+
+        return initial_type in (str, int)
 
     return False
