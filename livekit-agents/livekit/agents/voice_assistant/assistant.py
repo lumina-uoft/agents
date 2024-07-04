@@ -118,8 +118,8 @@ class VoiceAssistant(utils.EventEmitter[EventTypes]):
         fnc_ctx: allm.FunctionContext | None = None,
         allow_interruptions: bool = True,
         interrupt_speech_duration: float = 0.65,
-        interrupt_min_words: int = 3,
-        base_volume: float = 1.0,
+        interrupt_min_words: int = 1, # Yi: Change from 3 to 1
+        base_volume: float = 1.0, 
         debug: bool = False,
         plotting: bool = False,
         preemptive_synthesis: bool = True,
