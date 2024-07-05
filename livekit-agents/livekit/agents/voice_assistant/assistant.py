@@ -22,7 +22,7 @@ def save_message(role, text):
     with open(file_path, 'a') as f:
         f.write(f"{timestamp} - {role}: {text}\n")
 
-async def _default_will_create_llm_stream(
+async def _default_will_synthesize_assistant_reply(
     assistant: VoiceAssistant, chat_ctx: llm.ChatContext
 ) -> llm.LLMStream:
     return assistant.llm.chat(chat_ctx=chat_ctx, fnc_ctx=assistant.fnc_ctx)
@@ -40,7 +40,7 @@ EventTypes = Literal[
     "function_calls_finished",
 ]
 
-WillCreateLLMStream = Callable[
+WillSynthesizeAssistantReply = Callable[
     ["VoiceAssistant", llm.ChatContext],
     Union[Optional[llm.LLMStream], Awaitable[Optional[llm.LLMStream]]],
 ]
@@ -61,7 +61,7 @@ class VoiceAssistant(utils.EventEmitter[EventTypes]):
         interrupt_min_words: int = 2, # Yi: Change from 3 to 2
         preemptive_synthesis: bool = True,
         transcription: bool = True,
-        will_create_llm_stream: WillCreateLLMStream = _default_will_create_llm_stream,
+        will_synthesize_assistant_reply: WillSynthesizeAssistantReply = _default_will_synthesize_assistant_reply,
         sentence_tokenizer: tokenize.SentenceTokenizer = tokenize.basic.SentenceTokenizer(),
         word_tokenizer: tokenize.WordTokenizer = tokenize.basic.WordTokenizer(),
         hyphenate_word: Callable[[str], list[str]] = tokenize.basic.hyphenate_word,
@@ -73,10 +73,10 @@ class VoiceAssistant(utils.EventEmitter[EventTypes]):
         super().__init__()
         loop = loop or asyncio.get_event_loop()
 
-        def will_create_llm_stream_impl(
+        def will_synthesize_llm_stream_impl(
             _: impl.AssistantImpl, chat_ctx: llm.ChatContext
         ):
-            return will_create_llm_stream(self, chat_ctx)
+            return will_synthesize_assistant_reply(self, chat_ctx)
 
         opts = impl.ImplOptions(
             plotting=plotting,
@@ -90,7 +90,7 @@ class VoiceAssistant(utils.EventEmitter[EventTypes]):
             word_tokenizer=word_tokenizer,
             hyphenate_word=hyphenate_word,
             transcription_speed=transcription_speed,
-            will_create_llm_stream=will_create_llm_stream_impl,
+            will_synthesize_assistant_answer=will_synthesize_llm_stream_impl,
         )
 
         # wrap with StreamAdapter automatically when streaming is not supported on a specific TTS
