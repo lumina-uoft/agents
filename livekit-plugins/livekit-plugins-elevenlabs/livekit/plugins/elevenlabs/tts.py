@@ -90,7 +90,7 @@ SPONGE_VOICE = Voice(
 
 # Middle-aged Male with American accent - relatively slow paced
 MATHEW_VOICE = Voice(
-    id="x3keOIw4qFkhll7y5K0m",
+    id="x3keOIw4qFkhll7y5K0m", 
     name="Mathew",
     category="cloned",
     settings=VoiceSettings(
@@ -98,6 +98,14 @@ MATHEW_VOICE = Voice(
     ),
 )
 
+PATRICK_VOICE = Voice(
+    id="ODq5zmih8GrVes37Dizd",
+    name="Patrick",
+    category="premade",
+    settings=VoiceSettings(
+        stability=0.81, similarity_boost=0.75, style=0.0, use_speaker_boost=True
+    ),
+)
 
 SANTA_VOICE = Voice(
     id="knrPHWnBmmDHMoiMeP3l",
