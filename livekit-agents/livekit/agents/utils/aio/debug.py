@@ -2,7 +2,7 @@ import asyncio
 import time
 from asyncio.base_events import _format_handle  # type: ignore
 
-from ..log import logger
+from ...log import logger
 
 
 def hook_slow_callbacks(slow_duration: float) -> None:
