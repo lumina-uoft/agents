@@ -25,7 +25,7 @@ from typing import List, Literal, Optional
 
 import aiohttp
 from livekit import rtc
-from livekit.agents import aio, tokenize, tts, utils # type: ignore
+from livekit.agents import tokenize, tts, utils
 
 from .log import logger
 from .models import (
@@ -317,8 +317,8 @@ class SynthesizeStream(tts.SynthesizeStream):
 
     @dataclass
     class _SegmentConnection:
-        audio_rx: aio.ChanReceiver[tts.SynthesizedAudio]
-        task: asyncio.Task
+        audio_rx: utils.aio.ChanReceiver[tts.SynthesizedAudio]
+        task: asyncio.Task[None]
 
     def __init__(
         self,
@@ -397,13 +397,11 @@ class SynthesizeStream(tts.SynthesizeStream):
             (this also allows concurrent connections to 11labs)"""
 
             cur_segment: SynthesizeStream._SegmentConnection | None = None
-            token_tx: aio.ChanSender[str] | None = None
+            token_tx: utils.aio.ChanSender[str] | None = None
             async for ev in self._word_stream:
                 if ev.type == tokenize.TokenEventType.STARTED:
-                    token_tx, token_rx = aio.channel()
-                    audio_tx: aio.ChanSender[tts.SynthesizedAudio]
-                    audio_rx: aio.ChanReceiver[tts.SynthesizedAudio]
-                    audio_tx, audio_rx = aio.channel()
+                    token_tx = token_rx = utils.aio.Chan[str]()
+                    audio_tx = audio_rx = utils.aio.Chan[tts.SynthesizedAudio]()
                     task = asyncio.create_task(
                         self._run_ws(max_retry_per_segment, audio_tx, token_rx)
                     )
@@ -429,8 +427,8 @@ class SynthesizeStream(tts.SynthesizeStream):
     async def _run_ws(
         self,
         max_retry: int,
-        audio_tx: aio.ChanSender[tts.SynthesizedAudio],
-        token_rx: aio.ChanReceiver[str],
+        audio_tx: utils.aio.ChanSender[tts.SynthesizedAudio],
+        token_rx: utils.aio.ChanReceiver[str],
     ) -> None:
         # try to connect to 11labs
         ws_conn: aiohttp.ClientWebSocketResponse | None = None

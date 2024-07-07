@@ -1,4 +1,4 @@
-from . import http_context, _noop  # noqa
+from . import aio, codecs, http_context, images
 from .event_emitter import EventEmitter
 from .exp_filter import ExpFilter
 from .http_context import http_session
@@ -19,4 +19,5 @@ __all__ = [
     "log_exceptions",
     "codecs",
     "images",
+    "aio",
 ]

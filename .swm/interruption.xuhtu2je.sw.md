@@ -5,9 +5,9 @@ title: Interruption
 
 ---
 
-1\. <SwmToken path="/livekit-agents/livekit/agents/voice_assistant/assistant.py" pos="120:1:1" line-data="        interrupt_speech_duration: float = 0.65,">`interrupt_speech_duration`</SwmToken>: This parameter seems to define how long the user must be speaking (in seconds) before an interruption can be considered.
+1\. <SwmToken path="/livekit-agents/livekit/agents/voice_assistant/assistant.py" pos="60:1:1" line-data="        interrupt_speech_duration: float = 0.65,">`interrupt_speech_duration`</SwmToken>: This parameter seems to define how long the user must be speaking (in seconds) before an interruption can be considered.
 
-2\. <SwmToken path="/livekit-agents/livekit/agents/voice_assistant/assistant.py" pos="121:1:1" line-data="        interrupt_min_words: int = 1, # Yi: Change from 3 to 1">`interrupt_min_words`</SwmToken>: This parameter still defines the minimum number of words the user must say to trigger an interruption.
+2\. <SwmToken path="/livekit-agents/livekit/agents/voice_assistant/assistant.py" pos="61:1:1" line-data="        interrupt_min_words: int = 2, # Yi: Change from 3 to 2">`interrupt_min_words`</SwmToken>: This parameter still defines the minimum number of words the user must say to trigger an interruption.
 
 ```python
         allow_interruptions: bool = True,
@@ -19,11 +19,11 @@ title: Interruption
 
 </SwmSnippet>
 
-<SwmSnippet path="/livekit-agents/livekit/agents/voice_assistant/assistant.py" line="138">
+<SwmSnippet path="/livekit-agents/livekit/agents/voice_assistant/assistant.py" line="84">
 
 ---
 
-This code snippet sets the values of `allow_interruptions`, `interrupt_speech_duration`, and `interrupt_min_words` based on the corresponding variables.
+/
 
 ```python
             allow_interruptions=allow_interruptions,
@@ -139,7 +139,7 @@ If there is 1) no validated speech, 2) interruptions are not allowed, or 3) the 
 
 Checks if the transcribed text from the user’s interruption attempt meets the minimum word requirement (interrupt_min_words). If the user’s speech is too short, it does not interrupt the assistant’s speech.
 
-3\. **Assistant’s Speech Duration Check:** 
+3\. **Assistant’s Speech Duration Check:**
 
 Ensures the assistant has been speaking for a sufficient duration (interrupt_speech_duration) before allowing interruptions.
 
