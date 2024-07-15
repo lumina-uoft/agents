@@ -65,6 +65,10 @@ class LLM(llm.LLM):
             opts["tools"] = fncs_desc
 
         messages = _build_oai_context(chat_ctx, id(self))
+
+        # Yi: Print the constructed message for debugging
+        print("Constructed message for OpenAI:", messages)
+
         cmp = self._client.chat.completions.create(
             messages=messages,
             model=self._opts.model,
@@ -190,7 +194,13 @@ class LLMStream(llm.LLMStream):
 def _build_oai_context(
     chat_ctx: llm.ChatContext, cache_key: Any
 ) -> list[ChatCompletionMessageParam]:
-    return [_build_oai_message(msg, cache_key) for msg in chat_ctx.messages]  # type: ignore
+    #return [_build_oai_message(msg, cache_key) for msg in chat_ctx.messages]  # original code
+    context_messages = [_build_oai_message(msg, cache_key) for msg in chat_ctx.messages]  # type: ignore #Yi: add logging
+    
+    # Print the context messages for debugging #Yi: add logging
+    print("Context messages for OpenAI:", context_messages) #Yi: add logging
+    
+    return context_messages #Yi: add logging
 
 
 def _build_oai_message(msg: llm.ChatMessage, cache_key: Any):

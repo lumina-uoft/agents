@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
-from typing import AsyncIterable, Union
+from typing import Any, AsyncIterable, Union
 
 from livekit import rtc
 
@@ -31,7 +31,7 @@ class SynthesisHandle:
         )
         self._buf_ch = utils.aio.Chan[rtc.AudioFrame]()
         self._play_handle: PlayoutHandle | None = None
-        self._interrupt_fut = asyncio.Future()
+        self._interrupt_fut = asyncio.Future[None]()
         self._collected_text = ""  # collected text from the async stream
 
     @property
@@ -56,7 +56,7 @@ class SynthesisHandle:
             raise RuntimeError("synthesis was interrupted")
 
         self._play_handle = self._audio_source.play(
-            self._buf_ch,
+            self._buf_ch, transcription_fwd=self._tr_fwd
         )
         return self._play_handle
 
@@ -78,7 +78,7 @@ class AgentOutput:
         tts: text_to_speech.TTS,
     ) -> None:
         self._room, self._source, self._llm, self._tts = room, source, llm, tts
-        self._tasks = set()
+        self._tasks = set[asyncio.Task[Any]]()
 
     @property
     def audio_source(self) -> CancellableAudioSource:
@@ -118,9 +118,9 @@ class AgentOutput:
     ) -> None:
         """Synthesize speech from the source"""
         if isinstance(handle._speech_source, str):
-            co = _str_synthesis_co(handle._speech_source, handle)
+            co = _str_synthesis_task(handle._speech_source, handle)
         else:
-            co = _stream_synthesis_co(handle._speech_source, handle)
+            co = _stream_synthesis_task(handle._speech_source, handle)
 
         synth = asyncio.create_task(co)
         try:
@@ -128,12 +128,13 @@ class AgentOutput:
                 [synth, handle._interrupt_fut], return_when=asyncio.FIRST_COMPLETED
             )
         finally:
-            synth.cancel()
             with contextlib.suppress(asyncio.CancelledError):
+                synth.cancel()
                 await synth
 
 
-async def _str_synthesis_co(
+@utils.log_exceptions(logger=logger)
+async def _str_synthesis_task(
     text: str,
     handle: SynthesisHandle,
 ) -> None:
@@ -168,7 +169,8 @@ async def _str_synthesis_co(
         # self._log_debug(f"tts finished synthesising {audio_duration:.2f}s of audio")
 
 
-async def _stream_synthesis_co(
+@utils.log_exceptions(logger=logger)
+async def _stream_synthesis_task(
     streamed_text: AsyncIterable[str],
     handle: SynthesisHandle,
 ) -> None:
